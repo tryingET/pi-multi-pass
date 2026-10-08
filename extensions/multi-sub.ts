@@ -32,6 +32,7 @@
  *   - google-antigravity (Antigravity)
  *   - minimax             (MiniMax global API key)
  *   - minimax-cn          (MiniMax China API key)
+ *   - opencode-go         (OpenCode Go API key)
  */
 
 import {
@@ -320,6 +321,11 @@ const PROVIDER_TEMPLATES: Record<string, ProviderTemplate> = {
 	"minimax-cn": {
 		displayName: "MiniMax (China)",
 		apiKey: "$MINIMAX_CN_API_KEY",
+	},
+
+	"opencode-go": {
+		displayName: "OpenCode Go",
+		apiKey: "$OPENCODE_API_KEY",
 	},
 };
 
@@ -2028,6 +2034,10 @@ function cloneModels(originalProvider: string, index: number) {
 		id: m.id,
 		name: `${m.name} (#${index})`,
 		api: m.api,
+		// A provider can serve models at different base URLs (OpenCode Go: /zen/go
+		// for Anthropic Messages, /zen/go/v1 for the OpenAI APIs); without its own,
+		// a model falls back to the provider-level baseUrl of the first model.
+		baseUrl: m.baseUrl,
 		reasoning: m.reasoning,
 		thinkingLevelMap: m.thinkingLevelMap ? { ...m.thinkingLevelMap } : undefined,
 		input: m.input as ("text" | "image")[],
